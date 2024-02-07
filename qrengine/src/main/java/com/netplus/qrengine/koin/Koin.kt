@@ -1,7 +1,7 @@
 package com.netplus.qrengine.koin
 
 import android.app.Application
-import com.netplus.coremechanism.mvvm.TallyRepository
+import com.netplus.qrengine.mvvm.TallyRepository
 import com.netplus.qrengine.backendRemote.TallyEndpoints
 import com.netplus.qrengine.internet.handler.InternetConfigViewModel
 import com.netplus.qrengine.mvvm.TallyViewModel

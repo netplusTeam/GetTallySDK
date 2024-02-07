@@ -1,6 +1,7 @@
 plugins {
     id 'com.android.library'
     id 'org.jetbrains.kotlin.android'
+    id 'maven-publish'
 }
 
 android {
@@ -45,4 +46,18 @@ dependencies {
     implementation("com.google.code.gson:gson:2.10")
     implementation("io.insert-koin:koin-android:3.2.0")
     implementation("com.google.crypto.tink:tink-android:1.8.0")
+}
+
+afterEvaluate {
+    publishing {
+        publications {
+            release(MavenPublication) {
+                from components.release
+
+                groupId = 'com.github.netplusTeam'
+                artifactId = 'tally-qrengine'
+                version = '1.0'
+            }
+        }
+    }
 }

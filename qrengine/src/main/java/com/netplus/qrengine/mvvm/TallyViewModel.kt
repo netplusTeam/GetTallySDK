@@ -2,7 +2,6 @@ package com.netplus.qrengine.mvvm
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.netplus.coremechanism.mvvm.TallyRepository
 import com.netplus.qrengine.backendRemote.model.login.LoginResponse
 import com.netplus.qrengine.backendRemote.model.merchants.AllMerchantResponse
 import com.netplus.qrengine.backendRemote.model.merchants.MerchantResponse
