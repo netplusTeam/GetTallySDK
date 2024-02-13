@@ -15,12 +15,9 @@ class TallyAppPreferences private constructor(context: Context) {
         const val PREFS_NAME = "TallyPref"
         // Keys for different preferences stored.
         const val TOKEN = "token"
-        const val QRCODE_IMAGE = "qrcode_image"
-        const val DATE_GENERATED = "date_generated"
-        const val CARD_AND_BANK_SCHEME = "card_and_bank_scheme"
-        const val QRCODE_ID = "user_id"
-        const val IS_NEW_CARD_GENERATED = "is_new_card_generated"
-        const val IS_NEW_CARD_DISPLAYED = "is_new_card_displayed"
+        const val FULL_NAME = "full_name"
+        const val BANK_NAME = "bank_name"
+        const val PHONE_NUMBER = "phone_number"
 
         // Volatile instance to ensure the instance remains a singleton across all threads.
         @Volatile
