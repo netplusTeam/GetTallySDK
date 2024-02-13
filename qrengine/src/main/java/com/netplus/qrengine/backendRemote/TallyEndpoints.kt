@@ -1,5 +1,8 @@
 package com.netplus.qrengine.backendRemote
 
+import com.netplus.qrengine.backendRemote.model.keys.FinancialInstitutionKeyResponse
+import com.netplus.qrengine.backendRemote.model.keys.FinancialInstitutionPayload
+import com.netplus.qrengine.backendRemote.model.keys.get.GetFinancialInstitutionKeyResponse
 import com.netplus.qrengine.backendRemote.model.login.LoginPayload
 import com.netplus.qrengine.backendRemote.model.login.LoginResponse
 import com.netplus.qrengine.backendRemote.model.merchants.AllMerchantResponse
@@ -120,4 +123,24 @@ interface TallyEndpoints {
         @Query("limit") limit: Int,
         @Query("page") page: Int
     ): Call<AllMerchantResponse>
+
+    /**
+     * Send [POST] to create key for specific financial institution
+     *
+     * @param url
+     * @param token
+     * @param financialInstitutionPayload
+     */
+    @POST
+    fun generateFinancialInstitutionKeys(
+        @Url url: String,
+        @Header("token") token: String,
+        @Body financialInstitutionPayload: FinancialInstitutionPayload
+    ): Call<FinancialInstitutionKeyResponse>
+
+    @GET
+    fun getGenerateFinancialInstitutionKeys(
+        @Url url: String,
+        @Path("partner_name") partnerName: String
+    ): Call<GetFinancialInstitutionKeyResponse>
 }

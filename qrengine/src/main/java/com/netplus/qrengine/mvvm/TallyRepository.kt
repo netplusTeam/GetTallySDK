@@ -1,6 +1,9 @@
 package com.netplus.qrengine.mvvm
 
 import com.netplus.qrengine.backendRemote.TallyEndpoints
+import com.netplus.qrengine.backendRemote.model.keys.FinancialInstitutionKeyResponse
+import com.netplus.qrengine.backendRemote.model.keys.FinancialInstitutionPayload
+import com.netplus.qrengine.backendRemote.model.keys.get.GetFinancialInstitutionKeyResponse
 import com.netplus.qrengine.backendRemote.model.login.LoginPayload
 import com.netplus.qrengine.backendRemote.model.login.LoginResponse
 import com.netplus.qrengine.backendRemote.model.merchants.AllMerchantResponse
@@ -535,6 +538,121 @@ class TallyRepository(private val tallyEndpoints: TallyEndpoints) {
                 }
 
                 override fun onFailure(call: Call<AllMerchantResponse>, t: Throwable) {
+                    apiResponseHandler.handleResponse(null, t.message, callback)
+                }
+            })
+    }
+
+    /**
+     * Initiates the generation of keys for a financial institution.
+     *
+     * This function facilitates secure communication with financial institutions by generating unique keys necessary for data encryption and decryption. It makes an HTTP request to a specified URL, passing along a payload containing information about the financial institution for which the keys are to be generated. The process is secured through the use of an authentication token, ensuring that only authorized requests are processed.
+     *
+     * @param url The URL endpoint for the key generation service. This endpoint is responsible for creating the encryption and decryption keys specific to a financial institution.
+     * @param token An authentication token to secure the request and ensure it is processed by authorized personnel or systems only.
+     * @param financialInstitutionPayload A payload containing necessary details about the financial institution, such as its name, ID, and other relevant information required for key generation.
+     * @param callback An instance of [ApiResponseHandler.Callback] that handles the response. It processes both the successful generation of keys and any errors encountered during the request.
+     *
+     * Usage:
+     * ```
+     * val financialInstitutionPayload = FinancialInstitutionPayload(
+     *     institutionId = "12345",
+     *     institutionName = "Example Bank"
+     *     // Other necessary details
+     * )
+     * generateFinancialInstitutionKeys(
+     *     url = "https://api.example.com/generateKeys",
+     *     token = "your_auth_token",
+     *     financialInstitutionPayload = financialInstitutionPayload,
+     *     callback = object : ApiResponseHandler.Callback<FinancialInstitutionKeyResponse> {
+     *         override fun onSuccess(data: FinancialInstitutionKeyResponse?) {
+     *             // Handle successful key generation here
+     *             println("Keys generated successfully.")
+     *         }
+     *
+     *         override fun onError(errorMessage: String?) {
+     *             // Handle any errors encountered during the request
+     *             println("Error generating keys: $errorMessage")
+     *         }
+     *     }
+     * )
+     * ```
+     *
+     * Note:
+     * - This function plays a crucial role in ensuring the security and integrity of data exchanged between an application and financial institutions.
+     * - The authentication token (`token`) adds an additional layer of security, safeguarding the key generation process against unauthorized access.
+     * - The asynchronous handling of the request and response ensures that the application remains responsive, enhancing user experience.
+     * - Proper error handling within the callback allows the application to gracefully handle failures, providing clear feedback to the user and maintaining trust.
+     * - This approach aligns with best practices in secure application development, particularly in financial services, where data protection is paramount.
+     *
+     * Through its careful implementation, this function exemplifies the importance of security measures in modern financial applications, facilitating secure and efficient communication with financial institutions.
+     */
+    fun generateFinancialInstitutionKeys(
+        url: String,
+        token: String,
+        financialInstitutionPayload: FinancialInstitutionPayload,
+        callback: ApiResponseHandler.Callback<FinancialInstitutionKeyResponse>
+    ) {
+        val apiResponseHandler = ApiResponseHandler<FinancialInstitutionKeyResponse>()
+        tallyEndpoints.generateFinancialInstitutionKeys(url, token, financialInstitutionPayload)
+            .enqueue(object : Callback<FinancialInstitutionKeyResponse> {
+                override fun onResponse(
+                    call: Call<FinancialInstitutionKeyResponse>,
+                    response: Response<FinancialInstitutionKeyResponse>
+                ) {
+                    if (response.isSuccessful) {
+                        apiResponseHandler.handleResponse(response.body(), null, callback)
+                    } else {
+                        val error = errorMapper.parseErrorMessage(response.errorBody())
+                        apiResponseHandler.handleResponse(null, error?.message, callback)
+                    }
+                }
+
+                override fun onFailure(call: Call<FinancialInstitutionKeyResponse>, t: Throwable) {
+                    apiResponseHandler.handleResponse(null, t.message, callback)
+                }
+            })
+    }
+
+    /**
+     * Retrieves the generated keys for a financial institution.
+     *
+     * This function is responsible for fetching the encryption and decryption keys that were previously generated for a financial institution. These keys are essential for secure communication and data exchange with the financial institution. The operation is performed by making a network request to a specified URL endpoint, using the name of the partner or financial institution as a parameter to identify the correct keys to retrieve.
+     *
+     * @param url The URL endpoint where the generated keys can be retrieved. This endpoint is specific to the service that manages encryption keys for financial institutions.
+     * @param partnerName The name of the partner or financial institution for which the keys were generated. This parameter is used to identify and fetch the correct set of keys.
+     * @param callback An instance of [ApiResponseHandler.Callback] that handles the response from the network request. It provides mechanisms to process the successfully retrieved keys or handle any errors encountered during the request.
+     *
+     * Note:
+     * - This function is crucial for maintaining the security and integrity of data exchanged with financial institutions by ensuring that the correct encryption keys are always used.
+     * - It abstracts the details of the network request and response handling, providing a simple interface for retrieving the necessary keys.
+     * - The callback mechanism allows for asynchronous processing of the network response, ensuring that the application remains responsive and can properly manage the flow of execution based on the outcome of the request.
+     * - Proper error handling is essential for diagnosing issues with key retrieval and ensuring that the application can respond appropriately to any failures.
+     */
+    fun getGenerateFinancialInstitutionKeys(
+        url: String,
+        partnerName: String,
+        callback: ApiResponseHandler.Callback<GetFinancialInstitutionKeyResponse>
+    ) {
+        val apiResponseHandler = ApiResponseHandler<GetFinancialInstitutionKeyResponse>()
+        tallyEndpoints.getGenerateFinancialInstitutionKeys(url, partnerName)
+            .enqueue(object : Callback<GetFinancialInstitutionKeyResponse> {
+                override fun onResponse(
+                    call: Call<GetFinancialInstitutionKeyResponse>,
+                    response: Response<GetFinancialInstitutionKeyResponse>
+                ) {
+                    if (response.isSuccessful) {
+                        apiResponseHandler.handleResponse(response.body(), null, callback)
+                    } else {
+                        val error = errorMapper.parseErrorMessage(response.errorBody())
+                        apiResponseHandler.handleResponse(null, error?.message, callback)
+                    }
+                }
+
+                override fun onFailure(
+                    call: Call<GetFinancialInstitutionKeyResponse>,
+                    t: Throwable
+                ) {
                     apiResponseHandler.handleResponse(null, t.message, callback)
                 }
             })

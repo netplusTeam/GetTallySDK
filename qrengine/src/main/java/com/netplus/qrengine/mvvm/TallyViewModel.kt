@@ -2,6 +2,9 @@ package com.netplus.qrengine.mvvm
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.netplus.qrengine.backendRemote.model.keys.FinancialInstitutionKeyResponse
+import com.netplus.qrengine.backendRemote.model.keys.FinancialInstitutionPayload
+import com.netplus.qrengine.backendRemote.model.keys.get.GetFinancialInstitutionKeyResponse
 import com.netplus.qrengine.backendRemote.model.login.LoginResponse
 import com.netplus.qrengine.backendRemote.model.merchants.AllMerchantResponse
 import com.netplus.qrengine.backendRemote.model.merchants.MerchantResponse
@@ -380,6 +383,48 @@ class TallyViewModel(private val tallyRepository: TallyRepository) : ViewModel()
         callback: ApiResponseHandler.Callback<AllMerchantResponse>
     ) = tallyRepository.getAllMerchant(url, token, limit, page, callback)
 
+    /**
+     * Initiates the generation of keys for a financial institution.
+     *
+     * This function triggers the generation of unique keys necessary for data encryption and decryption in communication with financial institutions. It delegates the task to the repository layer, which handles the interaction with external APIs or data sources. The provided callback receives notifications upon successful key generation or in case of any errors encountered during the process.
+     *
+     * @param url The URL endpoint for the key generation service. This endpoint is responsible for creating the encryption and decryption keys specific to a financial institution.
+     * @param token An authentication token to secure the request and ensure it is processed by authorized personnel or systems only.
+     * @param financialInstitutionPayload A payload containing necessary details about the financial institution, such as its name, ID, and other relevant information required for key generation.
+     * @param callback An instance of [ApiResponseHandler.Callback] that handles the response. It processes both the successful generation of keys and any errors encountered during the request.
+     *
+     * Note:
+     * - This function facilitates secure communication with financial institutions by ensuring the proper generation of encryption keys.
+     * - It abstracts away the complexities of the key generation process, providing a simple interface for initiating the operation.
+     * - The provided callback allows for asynchronous handling of the response, ensuring that the application remains responsive during key generation.
+     * - Proper error handling within the callback enables the application to gracefully manage failures and provide appropriate feedback to the user.
+     */
+    fun generateFinancialInstitutionKeys(
+        url: String,
+        token: String,
+        financialInstitutionPayload: FinancialInstitutionPayload,
+        callback: ApiResponseHandler.Callback<FinancialInstitutionKeyResponse>
+    ) = tallyRepository.generateFinancialInstitutionKeys(url, token, financialInstitutionPayload, callback)
+
+    /**
+     * Retrieves the generated keys for a financial institution.
+     *
+     * This function delegates the task of fetching the encryption and decryption keys for a financial institution to the repository layer. It takes in the URL endpoint and the name of the partner or financial institution as parameters to identify and fetch the correct set of keys. The operation is performed asynchronously, and the result is delivered via the provided callback.
+     *
+     * @param url The URL endpoint where the generated keys can be retrieved. This endpoint is specific to the service that manages encryption keys for financial institutions.
+     * @param partnerName The name of the partner or financial institution for which the keys were generated. This parameter is used to identify and fetch the correct set of keys.
+     * @param callback An instance of [ApiResponseHandler.Callback] that handles the response from the repository layer. It provides mechanisms to process the successfully retrieved keys or handle any errors encountered during the request.
+     *
+     * Note:
+     * - This function abstracts the details of network communication and response handling, providing a simple interface for fetching the necessary keys.
+     * - Proper error handling ensures that the application can respond appropriately to any failures encountered during the key retrieval process.
+     * - The use of a callback allows for asynchronous processing of the network response, ensuring that the application remains responsive and can properly manage the flow of execution based on the outcome of the request.
+     */
+    fun getGenerateFinancialInstitutionKeys(
+        url: String,
+        partnerName: String,
+        callback: ApiResponseHandler.Callback<GetFinancialInstitutionKeyResponse>
+    ) = tallyRepository.getGenerateFinancialInstitutionKeys(url, partnerName, callback)
 
     fun transferGeneratedQrData(generateQrcodeResponse: GenerateQrcodeResponse?) {
         recentGeneratedQrLiveData.value = generateQrcodeResponse
