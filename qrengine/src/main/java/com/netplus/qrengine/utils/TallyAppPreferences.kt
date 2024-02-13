@@ -18,6 +18,8 @@ class TallyAppPreferences private constructor(context: Context) {
         const val FULL_NAME = "full_name"
         const val BANK_NAME = "bank_name"
         const val PHONE_NUMBER = "phone_number"
+        const val EMAIL = "email"
+        const val USER_ID = "user_id"
 
         // Volatile instance to ensure the instance remains a singleton across all threads.
         @Volatile
