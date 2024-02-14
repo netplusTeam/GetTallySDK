@@ -635,7 +635,7 @@ class TallyRepository(private val tallyEndpoints: TallyEndpoints) {
         callback: ApiResponseHandler.Callback<GetFinancialInstitutionKeyResponse>
     ) {
         val apiResponseHandler = ApiResponseHandler<GetFinancialInstitutionKeyResponse>()
-        tallyEndpoints.getGenerateFinancialInstitutionKeys(url, partnerName)
+        tallyEndpoints.getGenerateFinancialInstitutionKeys(url, TOKEN, partnerName)
             .enqueue(object : Callback<GetFinancialInstitutionKeyResponse> {
                 override fun onResponse(
                     call: Call<GetFinancialInstitutionKeyResponse>,
