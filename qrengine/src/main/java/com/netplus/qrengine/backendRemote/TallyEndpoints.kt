@@ -132,7 +132,7 @@ interface TallyEndpoints {
      * @param financialInstitutionPayload
      */
     @POST
-    fun generateFinancialInstitutionKeys(
+    fun storeFinancialInstitutionKeys(
         @Url url: String,
         @Header("token") token: String,
         @Body financialInstitutionPayload: FinancialInstitutionPayload

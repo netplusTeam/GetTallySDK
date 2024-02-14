@@ -3,6 +3,7 @@ package com.netplus.qrengine.utils
 import androidx.appcompat.app.AppCompatActivity
 import com.netplus.qrengine.backendRemote.model.keys.FinancialInstitutionKeyResponse
 import com.netplus.qrengine.backendRemote.model.keys.FinancialInstitutionPayload
+import com.netplus.qrengine.backendRemote.model.keys.get.GetFinancialInstitutionKeyResponse
 import com.netplus.qrengine.backendRemote.model.login.LoginResponse
 import com.netplus.qrengine.backendRemote.model.merchants.AllMerchantResponse
 import com.netplus.qrengine.backendRemote.model.merchants.MerchantResponse
@@ -479,13 +480,13 @@ class TallyQrcodeGenerator : AppCompatActivity() {
      * - The provided callback allows for asynchronous handling of the response, ensuring that the application remains responsive during key generation.
      * - Proper error handling within the callback enables the application to gracefully manage failures and provide appropriate feedback to the user.
      */
-    fun generateFinancialInstitutionKeys(
+    fun storeFinancialInstitutionKeys(
         url: String,
         token: String,
         financialInstitutionPayload: FinancialInstitutionPayload,
         callback: TallyResponseCallback<FinancialInstitutionKeyResponse>
     ) {
-        tallyViewModel.generateFinancialInstitutionKeys(
+        tallyViewModel.storeFinancialInstitutionKeys(
             url,
             token,
             financialInstitutionPayload,
@@ -499,5 +500,38 @@ class TallyQrcodeGenerator : AppCompatActivity() {
                 }
             }
         )
+    }
+
+    /**
+     * Initiates a request to retrieve the generated keys for a financial institution through the ViewModel layer.
+     *
+     * This function utilizes the ViewModel to abstract the process of fetching encryption and decryption keys for a specified financial institution or partner. It demonstrates a clean architecture approach by separating the concerns and utilizing the ViewModel layer for UI-related data handling.
+     *
+     * @param url The URL endpoint to retrieve the generated keys. This URL points to the specific service capable of returning the encryption keys for the financial institution.
+     * @param partnerName The name of the partner or financial institution for which the keys are to be fetched. This identifies the specific set of keys to be retrieved.
+     * @param callback An implementation of [TallyResponseCallback] that handles the result of the request. It provides a success callback for when the keys are successfully retrieved and a failure callback for handling any errors.
+     *
+     * Note:
+     * - The function demonstrates how to effectively use a ViewModel for managing data retrieval in a way that is decoupled from the UI logic.
+     * - Utilizing callbacks in this manner allows for a flexible response handling mechanism, enabling the UI to update based on the success or failure of the key retrieval operation.
+     * - This approach ensures that UI components remain responsive and are updated appropriately based on the asynchronous outcome of the request.
+     */
+    fun getGenerateFinancialInstitutionKeys(
+        url: String,
+        partnerName: String,
+        callback: TallyResponseCallback<GetFinancialInstitutionKeyResponse>
+    ) {
+        tallyViewModel.getGenerateFinancialInstitutionKeys(
+            url,
+            partnerName,
+            object : ApiResponseHandler.Callback<GetFinancialInstitutionKeyResponse> {
+                override fun onSuccess(data: GetFinancialInstitutionKeyResponse?) {
+                    callback.success(data)
+                }
+
+                override fun onError(errorMessage: String?) {
+                    callback.failed(errorMessage)
+                }
+            })
     }
 }

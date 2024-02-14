@@ -587,14 +587,14 @@ class TallyRepository(private val tallyEndpoints: TallyEndpoints) {
      *
      * Through its careful implementation, this function exemplifies the importance of security measures in modern financial applications, facilitating secure and efficient communication with financial institutions.
      */
-    fun generateFinancialInstitutionKeys(
+    fun storeFinancialInstitutionKeys(
         url: String,
         token: String,
         financialInstitutionPayload: FinancialInstitutionPayload,
         callback: ApiResponseHandler.Callback<FinancialInstitutionKeyResponse>
     ) {
         val apiResponseHandler = ApiResponseHandler<FinancialInstitutionKeyResponse>()
-        tallyEndpoints.generateFinancialInstitutionKeys(url, token, financialInstitutionPayload)
+        tallyEndpoints.storeFinancialInstitutionKeys(url, token, financialInstitutionPayload)
             .enqueue(object : Callback<FinancialInstitutionKeyResponse> {
                 override fun onResponse(
                     call: Call<FinancialInstitutionKeyResponse>,

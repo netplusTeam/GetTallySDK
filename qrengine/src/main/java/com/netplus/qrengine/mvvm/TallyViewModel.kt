@@ -399,12 +399,12 @@ class TallyViewModel(private val tallyRepository: TallyRepository) : ViewModel()
      * - The provided callback allows for asynchronous handling of the response, ensuring that the application remains responsive during key generation.
      * - Proper error handling within the callback enables the application to gracefully manage failures and provide appropriate feedback to the user.
      */
-    fun generateFinancialInstitutionKeys(
+    fun storeFinancialInstitutionKeys(
         url: String,
         token: String,
         financialInstitutionPayload: FinancialInstitutionPayload,
         callback: ApiResponseHandler.Callback<FinancialInstitutionKeyResponse>
-    ) = tallyRepository.generateFinancialInstitutionKeys(url, token, financialInstitutionPayload, callback)
+    ) = tallyRepository.storeFinancialInstitutionKeys(url, token, financialInstitutionPayload, callback)
 
     /**
      * Retrieves the generated keys for a financial institution.
