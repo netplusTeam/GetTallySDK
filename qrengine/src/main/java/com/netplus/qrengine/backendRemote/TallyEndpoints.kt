@@ -141,6 +141,6 @@ interface TallyEndpoints {
     @GET
     fun getGenerateFinancialInstitutionKeys(
         @Url url: String,
-        @Path("partner_name") partnerName: String
+        @Query("partner_name") partnerName: String
     ): Call<GetFinancialInstitutionKeyResponse>
 }
