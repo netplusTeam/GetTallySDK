@@ -21,6 +21,7 @@ class TallyAppPreferences private constructor(context: Context) {
         const val EMAIL = "email"
         const val USER_ID = "user_id"
         const val PARTNER_ID = "partner_id"
+        const val IS_APP_FIRST_LAUNCHED = "is_app_first_launch"
 
         // Volatile instance to ensure the instance remains a singleton across all threads.
         @Volatile
