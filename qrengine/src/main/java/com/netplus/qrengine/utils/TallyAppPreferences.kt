@@ -20,6 +20,7 @@ class TallyAppPreferences private constructor(context: Context) {
         const val PHONE_NUMBER = "phone_number"
         const val EMAIL = "email"
         const val USER_ID = "user_id"
+        const val PARTNER_ID = "partner_id"
 
         // Volatile instance to ensure the instance remains a singleton across all threads.
         @Volatile
@@ -54,4 +55,6 @@ class TallyAppPreferences private constructor(context: Context) {
 
     // Clears all data from the preferences.
     fun clearAllData() = editor.clear().apply()
+
+    fun clearSingleData(key: String) = editor.remove(key).apply()
 }
