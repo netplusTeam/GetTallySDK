@@ -16,7 +16,7 @@ object TallSecurityUtil {
 
     // Constants for the keystore provider, key alias, preference file name, and data key.
     private const val KEYSTORE_PROVIDER = "AndroidKeyStore"
-    private const val KEY_ALIAS = "MyKeyAlias"
+    //private const val KEY_ALIAS = "MyKeyAlias"
     private const val PREFERENCE_FILE = "EncryptedDataPrefs"
     private const val DATA_KEY = "EncryptedData"
 
@@ -30,9 +30,9 @@ object TallSecurityUtil {
      * @param context The Android context.
      * @return An instance of Aead for encryption or decryption.
      */
-    private fun getOrGenerateKey(context: Context): Aead {
+    private fun getOrGenerateKey(context: Context, tallyKey: String): Aead {
         val keysetHandle = AndroidKeysetManager.Builder()
-            .withSharedPref(context, KEY_ALIAS, KEYSTORE_PROVIDER) // Associates the key with a shared preferences file.
+            .withSharedPref(context, tallyKey, KEYSTORE_PROVIDER) // Associates the key with a shared preferences file.
             .withKeyTemplate(AeadKeyTemplates.AES256_GCM) // Specifies the key template to use.
             .build()
             .keysetHandle
@@ -46,8 +46,8 @@ object TallSecurityUtil {
      * @param data The data to be encrypted as a String.
      * @return The encrypted data as a ByteArray.
      */
-    private fun encryptData(context: Context, data: String): ByteArray {
-        val aead = getOrGenerateKey(context)
+    private fun encryptData(context: Context, data: String, tallyKey: String): ByteArray {
+        val aead = getOrGenerateKey(context, tallyKey)
         return aead.encrypt(data.toByteArray(StandardCharsets.UTF_8), ByteArray(0))
     }
 
@@ -57,8 +57,8 @@ object TallSecurityUtil {
      * @param encryptedData The data to be decrypted as a ByteArray.
      * @return The decrypted data as a String.
      */
-    private fun decryptData(context: Context, encryptedData: ByteArray): String {
-        val aead = getOrGenerateKey(context)
+    private fun decryptData(context: Context, encryptedData: ByteArray, tallyKey: String): String {
+        val aead = getOrGenerateKey(context, tallyKey)
         return String(aead.decrypt(encryptedData, ByteArray(0)), StandardCharsets.UTF_8)
     }
 
@@ -67,11 +67,11 @@ object TallSecurityUtil {
      * @param context The Android context.
      * @param newData The data to be stored, wrapped in an EncryptedQrModel object.
      */
-    fun storeData(context: Context, newData: EncryptedQrModel) {
-        val currentData = retrieveData(context) ?: listOf()
+    fun storeData(context: Context, newData: EncryptedQrModel, tallyKey: String) {
+        val currentData = retrieveData(context, tallyKey) ?: listOf()
         val updatedData = currentData + newData
         val jsonData = convertToJson(updatedData)
-        val encryptedData = encryptData(context, jsonData)
+        val encryptedData = encryptData(context, jsonData, tallyKey)
         val base64EncryptedData = Base64.encodeToString(encryptedData, Base64.DEFAULT)
         val sharedPreferences = context.getSharedPreferences(PREFERENCE_FILE, Context.MODE_PRIVATE)
         sharedPreferences.edit().putString(DATA_KEY, base64EncryptedData).apply()
@@ -82,12 +82,12 @@ object TallSecurityUtil {
      * @param context The Android context.
      * @return A list of EncryptedQrModel objects or null if no data is found.
      */
-    fun retrieveData(context: Context): List<EncryptedQrModel>? {
+    fun retrieveData(context: Context, tallyKey: String): List<EncryptedQrModel>? {
         val sharedPreferences = context.getSharedPreferences(PREFERENCE_FILE, Context.MODE_PRIVATE)
         val base64EncryptedData = sharedPreferences.getString(DATA_KEY, null)
         return base64EncryptedData?.let {
             val encryptedData = Base64.decode(it, Base64.DEFAULT)
-            val decryptedJson = decryptData(context, encryptedData)
+            val decryptedJson = decryptData(context, encryptedData, tallyKey)
             convertFromJson(decryptedJson)
         }
     }
@@ -97,11 +97,11 @@ object TallSecurityUtil {
      * @param context The Android context.
      * @param qrcodeId The ID of the QR code to delete.
      */
-    fun deleteDataById(context: Context, qrcodeId: String) {
-        val currentData = retrieveData(context) ?: return
+    fun deleteDataById(context: Context, qrcodeId: String, tallyKey: String) {
+        val currentData = retrieveData(context, tallyKey) ?: return
         val qrcodeData = currentData.filterNot { it.qrcodeId == qrcodeId }
         val jsonData = convertToJson(qrcodeData)
-        val encryptedData = encryptData(context, jsonData)
+        val encryptedData = encryptData(context, jsonData, tallyKey)
         val base64EncryptedData = Base64.encodeToString(encryptedData, Base64.DEFAULT)
         val sharedPreferences = context.getSharedPreferences(PREFERENCE_FILE, Context.MODE_PRIVATE)
         sharedPreferences.edit().putString(DATA_KEY, base64EncryptedData).apply()
