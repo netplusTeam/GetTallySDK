@@ -17,6 +17,7 @@ import com.netplus.qrengine.backendRemote.model.qr.store.StoreTokenizedCardsResp
 import com.netplus.qrengine.backendRemote.model.transactions.updatedTransaction.UpdatedTransactionResponse
 import com.netplus.qrengine.backendRemote.responseManager.ApiResponseHandler
 import com.netplus.qrengine.backendRemote.responseManager.ErrorMapper
+import com.netplus.qrengine.utils.API_KEY
 import com.netplus.qrengine.utils.QR_AUTH_BASE_URL
 import com.netplus.qrengine.utils.QR_ENGINE_BASE_URL
 import com.netplus.qrengine.utils.TOKEN
@@ -635,7 +636,7 @@ class TallyRepository(private val tallyEndpoints: TallyEndpoints) {
         callback: ApiResponseHandler.Callback<GetFinancialInstitutionKeyResponse>
     ) {
         val apiResponseHandler = ApiResponseHandler<GetFinancialInstitutionKeyResponse>()
-        tallyEndpoints.getGenerateFinancialInstitutionKeys(url, partnerName)
+        tallyEndpoints.getGenerateFinancialInstitutionKeys(url, API_KEY, partnerName)
             .enqueue(object : Callback<GetFinancialInstitutionKeyResponse> {
                 override fun onResponse(
                     call: Call<GetFinancialInstitutionKeyResponse>,

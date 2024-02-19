@@ -8,3 +8,4 @@ const val MERCHANTS_BASE_URL = "https://contactless.netpluspay.com/user/get-part
 const val QR_ENGINE_BASE_URL = "https://tally.netpluspay.com/api/transactions"
 const val STORE_PARTNER_KEYS = "https://tally.netpluspay.com/api/storePartnerSecret"
 const val GET_PARTNER_KEYS = "https://tally.netpluspay.com/api/getPartnerSecret"
+const val API_KEY = "27403342c95d1d83a40c0a8523803ec1518e2e5d6edd64b6296a81e8f94b1091"
