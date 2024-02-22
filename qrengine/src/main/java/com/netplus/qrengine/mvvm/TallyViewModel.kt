@@ -2,6 +2,9 @@ package com.netplus.qrengine.mvvm
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.netplus.qrengine.backendRemote.model.card.CheckOutResponse
+import com.netplus.qrengine.backendRemote.model.card.PayPayload
+import com.netplus.qrengine.backendRemote.model.card.PayResponse
 import com.netplus.qrengine.backendRemote.model.keys.FinancialInstitutionKeyResponse
 import com.netplus.qrengine.backendRemote.model.keys.FinancialInstitutionPayload
 import com.netplus.qrengine.backendRemote.model.keys.get.GetFinancialInstitutionKeyResponse
@@ -404,7 +407,12 @@ class TallyViewModel(private val tallyRepository: TallyRepository) : ViewModel()
         token: String,
         financialInstitutionPayload: FinancialInstitutionPayload,
         callback: ApiResponseHandler.Callback<FinancialInstitutionKeyResponse>
-    ) = tallyRepository.storeFinancialInstitutionKeys(url, token, financialInstitutionPayload, callback)
+    ) = tallyRepository.storeFinancialInstitutionKeys(
+        url,
+        token,
+        financialInstitutionPayload,
+        callback
+    )
 
     /**
      * Retrieves the generated keys for a financial institution.
@@ -425,6 +433,19 @@ class TallyViewModel(private val tallyRepository: TallyRepository) : ViewModel()
         partnerName: String,
         callback: ApiResponseHandler.Callback<GetFinancialInstitutionKeyResponse>
     ) = tallyRepository.getGenerateFinancialInstitutionKeys(url, partnerName, callback)
+
+    fun cardCheckOut(
+        merchantId: String,
+        name: String,
+        email: String,
+        amount: Double,
+        currency: String,
+        orderId: String,
+        callback: ApiResponseHandler.Callback<CheckOutResponse>
+    ) = tallyRepository.cardCheckOut(merchantId, name, email, amount, currency, orderId, callback)
+
+    fun makePayment(payPayload: PayPayload, callback: ApiResponseHandler.Callback<PayResponse>) =
+        tallyRepository.makePayment(payPayload, callback)
 
     fun transferGeneratedQrData(generateQrcodeResponse: GenerateQrcodeResponse?) {
         recentGeneratedQrLiveData.value = generateQrcodeResponse

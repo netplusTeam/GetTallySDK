@@ -1,6 +1,9 @@
 package com.netplus.qrengine.utils
 
 import androidx.appcompat.app.AppCompatActivity
+import com.netplus.qrengine.backendRemote.model.card.CheckOutResponse
+import com.netplus.qrengine.backendRemote.model.card.PayPayload
+import com.netplus.qrengine.backendRemote.model.card.PayResponse
 import com.netplus.qrengine.backendRemote.model.keys.FinancialInstitutionKeyResponse
 import com.netplus.qrengine.backendRemote.model.keys.FinancialInstitutionPayload
 import com.netplus.qrengine.backendRemote.model.keys.get.GetFinancialInstitutionKeyResponse
@@ -533,5 +536,44 @@ class TallyQrcodeGenerator : AppCompatActivity() {
                     callback.failed(errorMessage)
                 }
             })
+    }
+
+    fun cardCheckOut(
+        merchantId: String,
+        name: String,
+        email: String,
+        amount: Double,
+        currency: String,
+        orderId: String,
+        callback: TallyResponseCallback<CheckOutResponse>
+    ) {
+        tallyViewModel.cardCheckOut(
+            merchantId,
+            name,
+            email,
+            amount,
+            currency,
+            orderId,
+            object : ApiResponseHandler.Callback<CheckOutResponse> {
+                override fun onSuccess(data: CheckOutResponse?) {
+                    callback.success(data)
+                }
+
+                override fun onError(errorMessage: String?) {
+                    callback.failed(errorMessage)
+                }
+            })
+    }
+
+    fun makePayment(payPayload: PayPayload, callback: TallyResponseCallback<PayResponse>) {
+        tallyViewModel.makePayment(payPayload, object : ApiResponseHandler.Callback<PayResponse> {
+            override fun onSuccess(data: PayResponse?) {
+                callback.success(data)
+            }
+
+            override fun onError(errorMessage: String?) {
+                callback.failed(errorMessage)
+            }
+        })
     }
 }

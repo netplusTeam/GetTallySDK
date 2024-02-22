@@ -7,11 +7,13 @@
 package com.netplus.qrengine.utils
 
 import android.app.Activity
+import android.content.ComponentName
 import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
@@ -22,6 +24,11 @@ import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.ImageView
 import androidx.appcompat.widget.AppCompatEditText
+import androidx.browser.customtabs.CustomTabsCallback
+import androidx.browser.customtabs.CustomTabsClient
+import androidx.browser.customtabs.CustomTabsIntent
+import androidx.browser.customtabs.CustomTabsServiceConnection
+import androidx.core.content.ContextCompat.getColor
 import com.netplus.qrengine.backendRemote.model.qr.EncryptedQrModel
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
@@ -39,6 +46,45 @@ import javax.crypto.Cipher
 import javax.crypto.SecretKeyFactory
 import javax.crypto.spec.PBEKeySpec
 import javax.crypto.spec.SecretKeySpec
+
+fun openInAppBrowser(context: Context, url: String?, colorResId: Int) {
+    val customTabsServiceConnection = object : CustomTabsServiceConnection() {
+        override fun onCustomTabsServiceConnected(name: ComponentName, client: CustomTabsClient) {
+            val customTabsSession = client.newSession(object : CustomTabsCallback() {
+                override fun onNavigationEvent(navigationEvent: Int, extras: Bundle?) {
+                    super.onNavigationEvent(navigationEvent, extras)
+                    // Here you can handle navigation events
+                    // Example: Log page loads, redirects, etc.
+                    when (navigationEvent) {
+                        NAVIGATION_STARTED -> {
+                            // Navigation started
+                        }
+                        NAVIGATION_FINISHED -> {
+                            // Navigation finished
+                        }
+                        // Add other cases as needed
+                    }
+                }
+            })
+            customTabsSession?.let {
+                val customTabsIntent = CustomTabsIntent.Builder(it)
+                    .setShowTitle(true)
+                    .setToolbarColor(getColor(context, colorResId))
+                    .build()
+
+                // Important: Keep the service connection until the navigation is finished.
+                customTabsIntent.launchUrl(context, Uri.parse(url))
+            }
+        }
+
+        override fun onServiceDisconnected(name: ComponentName?) {
+            // Handle the service disconnection if needed
+        }
+    }
+
+    // Bind the CustomTabsService
+    CustomTabsClient.bindCustomTabsService(context, "com.android.chrome", customTabsServiceConnection)
+}
 
 val listOfCardSchemes = listOf("Visa", "MasterCard", "American Express", "Discover", "Verve")
 
@@ -231,7 +277,7 @@ fun decodeBase64ToBitmap(base64String: String): Bitmap? {
     return null
 }
 
-private fun getBitmapFromImageView(imageView: ImageView): Bitmap? {
+private fun getBitmapFromImageView(imageView: ImageView): Bitmap {
     imageView.isDrawingCacheEnabled = true
     imageView.buildDrawingCache()
     val bitmap = Bitmap.createBitmap(imageView.drawingCache)

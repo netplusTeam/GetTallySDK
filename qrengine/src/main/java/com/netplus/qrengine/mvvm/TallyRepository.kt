@@ -1,6 +1,9 @@
 package com.netplus.qrengine.mvvm
 
 import com.netplus.qrengine.backendRemote.TallyEndpoints
+import com.netplus.qrengine.backendRemote.model.card.CheckOutResponse
+import com.netplus.qrengine.backendRemote.model.card.PayPayload
+import com.netplus.qrengine.backendRemote.model.card.PayResponse
 import com.netplus.qrengine.backendRemote.model.keys.FinancialInstitutionKeyResponse
 import com.netplus.qrengine.backendRemote.model.keys.FinancialInstitutionPayload
 import com.netplus.qrengine.backendRemote.model.keys.get.GetFinancialInstitutionKeyResponse
@@ -18,6 +21,8 @@ import com.netplus.qrengine.backendRemote.model.transactions.updatedTransaction.
 import com.netplus.qrengine.backendRemote.responseManager.ApiResponseHandler
 import com.netplus.qrengine.backendRemote.responseManager.ErrorMapper
 import com.netplus.qrengine.utils.API_KEY
+import com.netplus.qrengine.utils.CHECK_OUT_PAY_URL
+import com.netplus.qrengine.utils.CHECK_OUT_URL
 import com.netplus.qrengine.utils.QR_AUTH_BASE_URL
 import com.netplus.qrengine.utils.QR_ENGINE_BASE_URL
 import com.netplus.qrengine.utils.TOKEN
@@ -657,5 +662,61 @@ class TallyRepository(private val tallyEndpoints: TallyEndpoints) {
                     apiResponseHandler.handleResponse(null, t.message, callback)
                 }
             })
+    }
+
+    fun cardCheckOut(
+        merchantId: String,
+        name: String,
+        email: String,
+        amount: Double,
+        currency: String,
+        orderId: String,
+        callback: ApiResponseHandler.Callback<CheckOutResponse>
+    ) {
+        val apiResponseHandler = ApiResponseHandler<CheckOutResponse>()
+        tallyEndpoints.cardCheckOut(
+            CHECK_OUT_URL,
+            merchantId,
+            name,
+            email,
+            amount,
+            currency,
+            orderId
+        )
+            .enqueue(object : Callback<CheckOutResponse> {
+                override fun onResponse(
+                    call: Call<CheckOutResponse>,
+                    response: Response<CheckOutResponse>
+                ) {
+                    if (response.isSuccessful) {
+                        apiResponseHandler.handleResponse(response.body(), null, callback)
+                    } else {
+                        val error = errorMapper.parseErrorMessage(response.errorBody())
+                        apiResponseHandler.handleResponse(null, error?.message, callback)
+                    }
+                }
+
+                override fun onFailure(call: Call<CheckOutResponse>, t: Throwable) {
+                    apiResponseHandler.handleResponse(null, t.message, callback)
+                }
+            })
+    }
+
+    fun makePayment(payPayload: PayPayload, callback: ApiResponseHandler.Callback<PayResponse>) {
+        val apiResponseHandler = ApiResponseHandler<PayResponse>()
+        tallyEndpoints.makePayment(CHECK_OUT_PAY_URL, payPayload).enqueue(object : Callback<PayResponse> {
+            override fun onResponse(call: Call<PayResponse>, response: Response<PayResponse>) {
+                if (response.isSuccessful) {
+                    apiResponseHandler.handleResponse(response.body(), null, callback)
+                } else {
+                    val error = errorMapper.parseErrorMessage(response.errorBody())
+                    apiResponseHandler.handleResponse(null, error?.message, callback)
+                }
+            }
+
+            override fun onFailure(call: Call<PayResponse>, t: Throwable) {
+                apiResponseHandler.handleResponse(null, t.message, callback)
+            }
+        })
     }
 }

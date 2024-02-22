@@ -1,5 +1,8 @@
 package com.netplus.qrengine.backendRemote
 
+import com.netplus.qrengine.backendRemote.model.card.CheckOutResponse
+import com.netplus.qrengine.backendRemote.model.card.PayPayload
+import com.netplus.qrengine.backendRemote.model.card.PayResponse
 import com.netplus.qrengine.backendRemote.model.keys.FinancialInstitutionKeyResponse
 import com.netplus.qrengine.backendRemote.model.keys.FinancialInstitutionPayload
 import com.netplus.qrengine.backendRemote.model.keys.get.GetFinancialInstitutionKeyResponse
@@ -144,4 +147,18 @@ interface TallyEndpoints {
         @Header("api_key") apiKey: String,
         @Query("partner_name") partnerName: String
     ): Call<GetFinancialInstitutionKeyResponse>
+
+    @GET
+    fun cardCheckOut(
+        @Url url: String,
+        @Query("merchantId") merchantId: String,
+        @Query("name") name: String,
+        @Query("email") email: String,
+        @Query("amount") amount: Double,
+        @Query("currency") currency: String,
+        @Query("orderId") orderId: String,
+    ): Call<CheckOutResponse>
+
+    @POST
+    fun makePayment(@Url url: String, @Body payload: PayPayload): Call<PayResponse>
 }
