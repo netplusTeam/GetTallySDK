@@ -29,6 +29,7 @@ import androidx.browser.customtabs.CustomTabsClient
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.browser.customtabs.CustomTabsServiceConnection
 import androidx.core.content.ContextCompat.getColor
+import com.google.android.material.snackbar.Snackbar
 import com.netplus.qrengine.backendRemote.model.qr.EncryptedQrModel
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
@@ -643,3 +644,25 @@ fun convertDateToReadableFormat(dateStr: String): String {
     return outputFormat.format(date)
 }
 
+/**
+ * Shows a Snackbar from any View context.
+ *
+ * @param message The message to show in the Snackbar.
+ * @param length The duration for which the Snackbar should be shown. Defaults to Snackbar.LENGTH_LONG.
+ * @param actionText The text to be used for an optional action button on the Snackbar.
+ * @param action The action to be performed when the action button is pressed.
+ */
+fun View.showSnackbar(
+    message: String,
+    length: Int = Snackbar.LENGTH_LONG,
+    actionText: String? = null,
+    action: ((View) -> Unit)? = null
+) {
+    val snackbar = Snackbar.make(this, message, length)
+    if (actionText != null && action != null) {
+        snackbar.setAction(actionText) {
+            action(it)
+        }
+    }
+    snackbar.show()
+}
