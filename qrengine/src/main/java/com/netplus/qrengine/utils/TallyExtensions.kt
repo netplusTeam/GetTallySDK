@@ -645,24 +645,37 @@ fun convertDateToReadableFormat(dateStr: String): String {
 }
 
 /**
- * Shows a Snackbar from any View context.
+ * Shows a Snackbar message from any Context (e.g., Activity).
  *
- * @param message The message to show in the Snackbar.
- * @param length The duration for which the Snackbar should be shown. Defaults to Snackbar.LENGTH_LONG.
- * @param actionText The text to be used for an optional action button on the Snackbar.
- * @param action The action to be performed when the action button is pressed.
+ * @param message The message to show.
+ * @param length The duration for which the Snackbar is shown. Default is LENGTH_LONG.
+ * @param actionText The text of the action item on the Snackbar.
+ * @param action The lambda function to be invoked when the action item is clicked.
  */
-fun View.showSnackbar(
+fun Context.showSnackbar(
     message: String,
     length: Int = Snackbar.LENGTH_LONG,
     actionText: String? = null,
     action: ((View) -> Unit)? = null
 ) {
-    val snackbar = Snackbar.make(this, message, length)
+    val view = getActivityRootView() ?: return // Return if a suitable view is not found
+    val snackbar = Snackbar.make(view, message, length)
+
     if (actionText != null && action != null) {
         snackbar.setAction(actionText) {
             action(it)
         }
     }
     snackbar.show()
+}
+
+/**
+ * Finds the root view of the current Activity context.
+ *
+ * @return The root view of the current Activity, or `null` if not found.
+ */
+private fun Context.getActivityRootView(): View? {
+    val activity = this as? Activity ?: return null
+    val contentView = activity.findViewById<View>(android.R.id.content)
+    return contentView.rootView
 }
