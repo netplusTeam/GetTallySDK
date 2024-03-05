@@ -2,6 +2,7 @@ package com.netplus.qrengine.mvvm
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.google.gson.JsonObject
 import com.netplus.qrengine.backendRemote.model.card.CheckOutResponse
 import com.netplus.qrengine.backendRemote.model.card.PayPayload
 import com.netplus.qrengine.backendRemote.model.card.PayResponse
@@ -15,6 +16,7 @@ import com.netplus.qrengine.backendRemote.model.qr.GenerateQrcodeResponse
 import com.netplus.qrengine.backendRemote.model.qr.retreive.GetTokenizedCardsResponse
 import com.netplus.qrengine.backendRemote.model.qr.store.StoreTokenizedCardsResponse
 import com.netplus.qrengine.backendRemote.model.transactions.updatedTransaction.UpdatedTransactionResponse
+import com.netplus.qrengine.backendRemote.model.verve.VerveOtpPayload
 import com.netplus.qrengine.backendRemote.responseManager.ApiResponseHandler
 
 /**
@@ -446,6 +448,16 @@ class TallyViewModel(private val tallyRepository: TallyRepository) : ViewModel()
 
     fun makePayment(payPayload: PayPayload, callback: ApiResponseHandler.Callback<PayResponse>) =
         tallyRepository.makePayment(payPayload, callback)
+
+    fun makeVerveCardPayment(
+        payload: PayPayload,
+        callback: ApiResponseHandler.Callback<JsonObject>
+    ) = tallyRepository.makeVerveCardPayment(payload, callback)
+
+    fun sendOtpForVerveCard(
+        verveOtpPayload: VerveOtpPayload,
+        callback: ApiResponseHandler.Callback<JsonObject>
+    ) = tallyRepository.sendOtpForVerveCard(verveOtpPayload, callback)
 
     fun transferGeneratedQrData(generateQrcodeResponse: GenerateQrcodeResponse?) {
         recentGeneratedQrLiveData.value = generateQrcodeResponse

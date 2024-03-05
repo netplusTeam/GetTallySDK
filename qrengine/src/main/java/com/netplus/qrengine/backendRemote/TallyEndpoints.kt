@@ -1,5 +1,6 @@
 package com.netplus.qrengine.backendRemote
 
+import com.google.gson.JsonObject
 import com.netplus.qrengine.backendRemote.model.card.CheckOutResponse
 import com.netplus.qrengine.backendRemote.model.card.PayPayload
 import com.netplus.qrengine.backendRemote.model.card.PayResponse
@@ -18,6 +19,7 @@ import com.netplus.qrengine.backendRemote.model.qr.store.StoreTokenizedCardsPayl
 import com.netplus.qrengine.backendRemote.model.qr.store.StoreTokenizedCardsResponse
 import com.netplus.qrengine.backendRemote.model.transactions.TransactionResponse
 import com.netplus.qrengine.backendRemote.model.transactions.updatedTransaction.UpdatedTransactionResponse
+import com.netplus.qrengine.backendRemote.model.verve.VerveOtpPayload
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -161,4 +163,10 @@ interface TallyEndpoints {
 
     @POST
     fun makePayment(@Url url: String, @Body payload: PayPayload): Call<PayResponse>
+
+    @POST
+    fun makePaymentForVerveCard(@Url url: String, @Body payload: PayPayload): Call<JsonObject>
+
+    @POST
+    fun sendOTPForVerveCard(@Url url: String, @Body verveOtpPayload: VerveOtpPayload): Call<JsonObject>
 }

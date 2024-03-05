@@ -1,6 +1,7 @@
 package com.netplus.qrengine.utils
 
 import androidx.appcompat.app.AppCompatActivity
+import com.google.gson.JsonObject
 import com.netplus.qrengine.backendRemote.model.card.CheckOutResponse
 import com.netplus.qrengine.backendRemote.model.card.PayPayload
 import com.netplus.qrengine.backendRemote.model.card.PayResponse
@@ -14,6 +15,7 @@ import com.netplus.qrengine.backendRemote.model.qr.GenerateQrcodeResponse
 import com.netplus.qrengine.backendRemote.model.qr.retreive.GetTokenizedCardsResponse
 import com.netplus.qrengine.backendRemote.model.qr.store.StoreTokenizedCardsResponse
 import com.netplus.qrengine.backendRemote.model.transactions.updatedTransaction.UpdatedTransactionResponse
+import com.netplus.qrengine.backendRemote.model.verve.VerveOtpPayload
 import com.netplus.qrengine.backendRemote.responseManager.ApiResponseHandler
 import com.netplus.qrengine.internet.handler.InternetConfigViewModel
 import com.netplus.qrengine.mvvm.TallyViewModel
@@ -568,6 +570,30 @@ class TallyQrcodeGenerator : AppCompatActivity() {
     fun makePayment(payPayload: PayPayload, callback: TallyResponseCallback<PayResponse>) {
         tallyViewModel.makePayment(payPayload, object : ApiResponseHandler.Callback<PayResponse> {
             override fun onSuccess(data: PayResponse?) {
+                callback.success(data)
+            }
+
+            override fun onError(errorMessage: String?) {
+                callback.failed(errorMessage)
+            }
+        })
+    }
+
+    fun makeVerveCardPayment(payload: PayPayload, callback: TallyResponseCallback<JsonObject>) {
+        tallyViewModel.makeVerveCardPayment(payload, object  : ApiResponseHandler.Callback<JsonObject> {
+            override fun onSuccess(data: JsonObject?) {
+                callback.success(data)
+            }
+
+            override fun onError(errorMessage: String?) {
+                callback.failed(errorMessage)
+            }
+        })
+    }
+
+    fun sendOtpForVerveCard(verveOtpPayload: VerveOtpPayload, callback: TallyResponseCallback<JsonObject>) {
+        tallyViewModel.sendOtpForVerveCard(verveOtpPayload, object : ApiResponseHandler.Callback<JsonObject> {
+            override fun onSuccess(data: JsonObject?) {
                 callback.success(data)
             }
 

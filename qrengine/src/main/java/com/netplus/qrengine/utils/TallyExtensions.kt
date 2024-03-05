@@ -102,7 +102,7 @@ fun isValidCardNumber(cardNumber: String, cardType: String): Boolean {
         "MasterCard" to setOf(16),
         "American Express" to setOf(15),
         "Discover" to setOf(16),
-        "Verve" to setOf(16) // Update if the actual length is different
+        "Verve" to setOf(16, 18, 19) // Update if the actual length is different
     )
 
     return lengthMap[cardType]?.contains(cardNumber.length) == true

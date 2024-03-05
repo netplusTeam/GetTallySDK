@@ -1,5 +1,6 @@
 package com.netplus.qrengine.mvvm
 
+import com.google.gson.JsonObject
 import com.netplus.qrengine.backendRemote.TallyEndpoints
 import com.netplus.qrengine.backendRemote.model.card.CheckOutResponse
 import com.netplus.qrengine.backendRemote.model.card.PayPayload
@@ -18,6 +19,7 @@ import com.netplus.qrengine.backendRemote.model.qr.retreive.GetTokenizedCardsRes
 import com.netplus.qrengine.backendRemote.model.qr.store.StoreTokenizedCardsPayload
 import com.netplus.qrengine.backendRemote.model.qr.store.StoreTokenizedCardsResponse
 import com.netplus.qrengine.backendRemote.model.transactions.updatedTransaction.UpdatedTransactionResponse
+import com.netplus.qrengine.backendRemote.model.verve.VerveOtpPayload
 import com.netplus.qrengine.backendRemote.responseManager.ApiResponseHandler
 import com.netplus.qrengine.backendRemote.responseManager.ErrorMapper
 import com.netplus.qrengine.utils.API_KEY
@@ -715,6 +717,42 @@ class TallyRepository(private val tallyEndpoints: TallyEndpoints) {
             }
 
             override fun onFailure(call: Call<PayResponse>, t: Throwable) {
+                apiResponseHandler.handleResponse(null, t.message, callback)
+            }
+        })
+    }
+
+    fun makeVerveCardPayment(payload: PayPayload, callback: ApiResponseHandler.Callback<JsonObject>) {
+        val apiResponseHandler = ApiResponseHandler<JsonObject>()
+        tallyEndpoints.makePaymentForVerveCard(CHECK_OUT_PAY_URL, payload).enqueue(object : Callback<JsonObject>{
+            override fun onResponse(call: Call<JsonObject>, response: Response<JsonObject>) {
+                if (response.isSuccessful) {
+                    apiResponseHandler.handleResponse(response.body(), null, callback)
+                } else {
+                    val error = errorMapper.parseErrorMessage(response.errorBody())
+                    apiResponseHandler.handleResponse(null, error?.message, callback)
+                }
+            }
+
+            override fun onFailure(call: Call<JsonObject>, t: Throwable) {
+                apiResponseHandler.handleResponse(null, t.message, callback)
+            }
+        })
+    }
+
+    fun sendOtpForVerveCard(verveOtpPayload: VerveOtpPayload, callback: ApiResponseHandler.Callback<JsonObject>) {
+        val apiResponseHandler = ApiResponseHandler<JsonObject>()
+        tallyEndpoints.sendOTPForVerveCard(CHECK_OUT_PAY_URL, verveOtpPayload).enqueue(object : Callback<JsonObject>{
+            override fun onResponse(call: Call<JsonObject>, response: Response<JsonObject>) {
+                if (response.isSuccessful) {
+                    apiResponseHandler.handleResponse(response.body(), null, callback)
+                } else {
+                    val error = errorMapper.parseErrorMessage(response.errorBody())
+                    apiResponseHandler.handleResponse(null, error?.message, callback)
+                }
+            }
+
+            override fun onFailure(call: Call<JsonObject>, t: Throwable) {
                 apiResponseHandler.handleResponse(null, t.message, callback)
             }
         })
