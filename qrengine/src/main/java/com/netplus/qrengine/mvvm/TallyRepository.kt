@@ -21,7 +21,7 @@ import com.netplus.qrengine.backendRemote.model.qr.store.StoreTokenizedCardsResp
 import com.netplus.qrengine.backendRemote.model.transactions.updatedTransaction.UpdatedTransactionResponse
 import com.netplus.qrengine.backendRemote.model.verve.VerveOtpPayload
 import com.netplus.qrengine.backendRemote.responseManager.ApiResponseHandler
-import com.netplus.qrengine.backendRemote.responseManager.ErrorMapper
+import com.netplus.qrengine.backendRemote.responseManager.DynamicJsonErrorParser
 import com.netplus.qrengine.utils.API_KEY
 import com.netplus.qrengine.utils.CHECK_OUT_PAY_URL
 import com.netplus.qrengine.utils.CHECK_OUT_URL
@@ -41,7 +41,7 @@ import retrofit2.Response
 class TallyRepository(private val tallyEndpoints: TallyEndpoints) {
 
     // Error mapper instance to handle error responses.
-    var errorMapper: ErrorMapper = ErrorMapper()
+    var errorMapper: DynamicJsonErrorParser = DynamicJsonErrorParser()
 
     /**
      * Initiates a login request to authenticate a user.
@@ -91,15 +91,15 @@ class TallyRepository(private val tallyEndpoints: TallyEndpoints) {
                     response: Response<LoginResponse>
                 ) {
                     if (response.isSuccessful) {
-                        apiResponseHandler.handleResponse(response.body(), null, callback)
+                        apiResponseHandler.handleResponse(response.body(), null, response.code(), callback)
                     } else {
-                        val error = errorMapper.parseErrorMessage(response.errorBody())
-                        apiResponseHandler.handleResponse(null, error?.message, callback)
+                        val error = DynamicJsonErrorParser.parseError(response.errorBody())
+                        apiResponseHandler.handleResponse(null, error?.first, response.code(), callback)
                     }
                 }
 
                 override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
-                    apiResponseHandler.handleResponse(null, t.message, callback)
+                    apiResponseHandler.handleResponse(null, t.message, 500, callback)
                 }
             })
     }
@@ -193,15 +193,15 @@ class TallyRepository(private val tallyEndpoints: TallyEndpoints) {
                     response: Response<GenerateQrcodeResponse>
                 ) {
                     if (response.isSuccessful) {
-                        apiResponseHandler.handleResponse(response.body(), null, callback)
+                        apiResponseHandler.handleResponse(response.body(), null, response.code(), callback)
                     } else {
-                        val error = errorMapper.parseErrorMessage(response.errorBody())
-                        apiResponseHandler.handleResponse(null, error?.message, callback)
+                        val error = DynamicJsonErrorParser.parseError(response.errorBody())
+                        apiResponseHandler.handleResponse(null, error?.first, response.code(), callback)
                     }
                 }
 
                 override fun onFailure(call: Call<GenerateQrcodeResponse>, t: Throwable) {
-                    apiResponseHandler.handleResponse(null, t.message, callback)
+                    apiResponseHandler.handleResponse(null, t.message, 500, callback)
                 }
             })
     }
@@ -270,15 +270,15 @@ class TallyRepository(private val tallyEndpoints: TallyEndpoints) {
                     response: Response<StoreTokenizedCardsResponse>
                 ) {
                     if (response.isSuccessful) {
-                        apiResponseHandler.handleResponse(response.body(), null, callback)
+                        apiResponseHandler.handleResponse(response.body(), null, response.code(), callback)
                     } else {
-                        val error = errorMapper.parseErrorMessage(response.errorBody())
-                        apiResponseHandler.handleResponse(null, error?.message, callback)
+                        val error = DynamicJsonErrorParser.parseError(response.errorBody())
+                        apiResponseHandler.handleResponse(null, error?.first, response.code(), callback)
                     }
                 }
 
                 override fun onFailure(call: Call<StoreTokenizedCardsResponse>, t: Throwable) {
-                    apiResponseHandler.handleResponse(null, t.message, callback)
+                    apiResponseHandler.handleResponse(null, t.message, 500, callback)
                 }
             })
     }
@@ -324,15 +324,15 @@ class TallyRepository(private val tallyEndpoints: TallyEndpoints) {
                 response: Response<GetTokenizedCardsResponse>
             ) {
                 if (response.isSuccessful) {
-                    apiResponseHandler.handleResponse(response.body(), null, callback)
+                    apiResponseHandler.handleResponse(response.body(), null, response.code(), callback)
                 } else {
-                    val error = errorMapper.parseErrorMessage(response.errorBody())
-                    apiResponseHandler.handleResponse(null, error?.message, callback)
+                    val error = DynamicJsonErrorParser.parseError(response.errorBody())
+                    apiResponseHandler.handleResponse(null, error?.first, response.code(), callback)
                 }
             }
 
             override fun onFailure(call: Call<GetTokenizedCardsResponse>, t: Throwable) {
-                apiResponseHandler.handleResponse(null, t.message, callback)
+                apiResponseHandler.handleResponse(null, t.message, 500, callback)
             }
         })
     }
@@ -398,15 +398,15 @@ class TallyRepository(private val tallyEndpoints: TallyEndpoints) {
                     response: Response<UpdatedTransactionResponse>
                 ) {
                     if (response.isSuccessful) {
-                        apiResponseHandler.handleResponse(response.body(), null, callback)
+                        apiResponseHandler.handleResponse(response.body(), null, response.code(), callback)
                     } else {
-                        val error = errorMapper.parseErrorMessage(response.errorBody())
-                        apiResponseHandler.handleResponse(null, error?.message, callback)
+                        val error = DynamicJsonErrorParser.parseError(response.errorBody())
+                        apiResponseHandler.handleResponse(null, error?.first, response.code(), callback)
                     }
                 }
 
                 override fun onFailure(call: Call<UpdatedTransactionResponse>, t: Throwable) {
-                    apiResponseHandler.handleResponse(null, t.message, callback)
+                    apiResponseHandler.handleResponse(null, t.message, 500, callback)
                 }
             })
     }
@@ -469,15 +469,15 @@ class TallyRepository(private val tallyEndpoints: TallyEndpoints) {
                     response: Response<MerchantResponse>
                 ) {
                     if (response.isSuccessful) {
-                        apiResponseHandler.handleResponse(response.body(), null, callback)
+                        apiResponseHandler.handleResponse(response.body(), null, response.code(), callback)
                     } else {
-                        val error = errorMapper.parseErrorMessage(response.errorBody())
-                        apiResponseHandler.handleResponse(null, error?.message, callback)
+                        val error = DynamicJsonErrorParser.parseError(response.errorBody())
+                        apiResponseHandler.handleResponse(null, error?.first, response.code(), callback)
                     }
                 }
 
                 override fun onFailure(call: Call<MerchantResponse>, t: Throwable) {
-                    apiResponseHandler.handleResponse(null, t.message, callback)
+                    apiResponseHandler.handleResponse(null, t.message, 500, callback)
                 }
             })
     }
@@ -538,15 +538,15 @@ class TallyRepository(private val tallyEndpoints: TallyEndpoints) {
                     response: Response<AllMerchantResponse>
                 ) {
                     if (response.isSuccessful) {
-                        apiResponseHandler.handleResponse(response.body(), null, callback)
+                        apiResponseHandler.handleResponse(response.body(), null, response.code(), callback)
                     } else {
-                        val error = errorMapper.parseErrorMessage(response.errorBody())
-                        apiResponseHandler.handleResponse(null, error?.message, callback)
+                        val error = DynamicJsonErrorParser.parseError(response.errorBody())
+                        apiResponseHandler.handleResponse(null, error?.first, response.code(), callback)
                     }
                 }
 
                 override fun onFailure(call: Call<AllMerchantResponse>, t: Throwable) {
-                    apiResponseHandler.handleResponse(null, t.message, callback)
+                    apiResponseHandler.handleResponse(null, t.message, 500, callback)
                 }
             })
     }
@@ -609,15 +609,15 @@ class TallyRepository(private val tallyEndpoints: TallyEndpoints) {
                     response: Response<FinancialInstitutionKeyResponse>
                 ) {
                     if (response.isSuccessful) {
-                        apiResponseHandler.handleResponse(response.body(), null, callback)
+                        apiResponseHandler.handleResponse(response.body(), null, response.code(), callback)
                     } else {
-                        val error = errorMapper.parseErrorMessage(response.errorBody())
-                        apiResponseHandler.handleResponse(null, error?.message, callback)
+                        val error = DynamicJsonErrorParser.parseError(response.errorBody())
+                        apiResponseHandler.handleResponse(null, error?.first, response.code(), callback)
                     }
                 }
 
                 override fun onFailure(call: Call<FinancialInstitutionKeyResponse>, t: Throwable) {
-                    apiResponseHandler.handleResponse(null, t.message, callback)
+                    apiResponseHandler.handleResponse(null, t.message, 500, callback)
                 }
             })
     }
@@ -650,10 +650,10 @@ class TallyRepository(private val tallyEndpoints: TallyEndpoints) {
                     response: Response<GetFinancialInstitutionKeyResponse>
                 ) {
                     if (response.isSuccessful) {
-                        apiResponseHandler.handleResponse(response.body(), null, callback)
+                        apiResponseHandler.handleResponse(response.body(), null, response.code(), callback)
                     } else {
-                        val error = errorMapper.parseErrorMessage(response.errorBody())
-                        apiResponseHandler.handleResponse(null, error?.message, callback)
+                        val error = DynamicJsonErrorParser.parseError(response.errorBody())
+                        apiResponseHandler.handleResponse(null, error?.first, response.code(), callback)
                     }
                 }
 
@@ -661,7 +661,7 @@ class TallyRepository(private val tallyEndpoints: TallyEndpoints) {
                     call: Call<GetFinancialInstitutionKeyResponse>,
                     t: Throwable
                 ) {
-                    apiResponseHandler.handleResponse(null, t.message, callback)
+                    apiResponseHandler.handleResponse(null, t.message, 500, callback)
                 }
             })
     }
@@ -691,15 +691,15 @@ class TallyRepository(private val tallyEndpoints: TallyEndpoints) {
                     response: Response<CheckOutResponse>
                 ) {
                     if (response.isSuccessful) {
-                        apiResponseHandler.handleResponse(response.body(), null, callback)
+                        apiResponseHandler.handleResponse(response.body(), null, response.code(), callback)
                     } else {
-                        val error = errorMapper.parseErrorMessage(response.errorBody())
-                        apiResponseHandler.handleResponse(null, error?.message, callback)
+                        val error = DynamicJsonErrorParser.parseError(response.errorBody())
+                        apiResponseHandler.handleResponse(null, error?.first, response.code(), callback)
                     }
                 }
 
                 override fun onFailure(call: Call<CheckOutResponse>, t: Throwable) {
-                    apiResponseHandler.handleResponse(null, t.message, callback)
+                    apiResponseHandler.handleResponse(null, t.message, 500, callback)
                 }
             })
     }
@@ -709,15 +709,15 @@ class TallyRepository(private val tallyEndpoints: TallyEndpoints) {
         tallyEndpoints.makePayment(CHECK_OUT_PAY_URL, payPayload).enqueue(object : Callback<PayResponse> {
             override fun onResponse(call: Call<PayResponse>, response: Response<PayResponse>) {
                 if (response.isSuccessful) {
-                    apiResponseHandler.handleResponse(response.body(), null, callback)
+                    apiResponseHandler.handleResponse(response.body(), null, response.code(), callback)
                 } else {
-                    val error = errorMapper.parseErrorMessage(response.errorBody())
-                    apiResponseHandler.handleResponse(null, error?.message, callback)
+                    val error = DynamicJsonErrorParser.parseError(response.errorBody())
+                    apiResponseHandler.handleResponse(null, error?.first, response.code(), callback)
                 }
             }
 
             override fun onFailure(call: Call<PayResponse>, t: Throwable) {
-                apiResponseHandler.handleResponse(null, t.message, callback)
+                apiResponseHandler.handleResponse(null, t.message, 500, callback)
             }
         })
     }
@@ -727,15 +727,15 @@ class TallyRepository(private val tallyEndpoints: TallyEndpoints) {
         tallyEndpoints.makePaymentForVerveCard(CHECK_OUT_PAY_URL, payload).enqueue(object : Callback<JsonObject>{
             override fun onResponse(call: Call<JsonObject>, response: Response<JsonObject>) {
                 if (response.isSuccessful) {
-                    apiResponseHandler.handleResponse(response.body(), null, callback)
+                    apiResponseHandler.handleResponse(response.body(), null, response.code(), callback)
                 } else {
-                    val error = errorMapper.parseErrorMessage(response.errorBody())
-                    apiResponseHandler.handleResponse(null, error?.message, callback)
+                    val error = DynamicJsonErrorParser.parseError(response.errorBody())
+                    apiResponseHandler.handleResponse(null, error?.first, response.code(), callback)
                 }
             }
 
             override fun onFailure(call: Call<JsonObject>, t: Throwable) {
-                apiResponseHandler.handleResponse(null, t.message, callback)
+                apiResponseHandler.handleResponse(null, t.message, 500, callback)
             }
         })
     }
@@ -745,15 +745,15 @@ class TallyRepository(private val tallyEndpoints: TallyEndpoints) {
         tallyEndpoints.sendOTPForVerveCard(CHECK_OUT_PAY_URL, verveOtpPayload).enqueue(object : Callback<JsonObject>{
             override fun onResponse(call: Call<JsonObject>, response: Response<JsonObject>) {
                 if (response.isSuccessful) {
-                    apiResponseHandler.handleResponse(response.body(), null, callback)
+                    apiResponseHandler.handleResponse(response.body(), null, response.code(), callback)
                 } else {
-                    val error = errorMapper.parseErrorMessage(response.errorBody())
-                    apiResponseHandler.handleResponse(null, error?.message, callback)
+                    val error = DynamicJsonErrorParser.parseError(response.errorBody())
+                    apiResponseHandler.handleResponse(null, error?.first, response.code(), callback)
                 }
             }
 
             override fun onFailure(call: Call<JsonObject>, t: Throwable) {
-                apiResponseHandler.handleResponse(null, t.message, callback)
+                apiResponseHandler.handleResponse(null, t.message, 500, callback)
             }
         })
     }

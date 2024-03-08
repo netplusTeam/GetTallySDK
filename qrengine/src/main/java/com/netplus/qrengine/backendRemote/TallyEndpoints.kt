@@ -143,6 +143,13 @@ interface TallyEndpoints {
         @Body financialInstitutionPayload: FinancialInstitutionPayload
     ): Call<FinancialInstitutionKeyResponse>
 
+    /**
+     * Send [GET] to get the keys for specific financial institution
+     *
+     * @param url
+     * @param apiKey
+     * @param partnerName
+     */
     @GET
     fun getGenerateFinancialInstitutionKeys(
         @Url url: String,
@@ -150,6 +157,16 @@ interface TallyEndpoints {
         @Query("partner_name") partnerName: String
     ): Call<GetFinancialInstitutionKeyResponse>
 
+    /**
+     * Send [GET] to process MasterCard/VisaCard charge
+     *
+     * @param merchantId
+     * @param name
+     * @param email
+     * @param amount
+     * @param currency
+     * @param orderId
+     */
     @GET
     fun cardCheckOut(
         @Url url: String,
@@ -161,12 +178,30 @@ interface TallyEndpoints {
         @Query("orderId") orderId: String,
     ): Call<CheckOutResponse>
 
+    /**
+     * Send [POST] to process charge payment for Master/VisaCard
+     *
+     * @param url
+     * @param payload
+     */
     @POST
     fun makePayment(@Url url: String, @Body payload: PayPayload): Call<PayResponse>
 
+    /**
+     * Send [POST] for charging VerveCard
+     *
+     * @param url
+     * @param payload
+     */
     @POST
     fun makePaymentForVerveCard(@Url url: String, @Body payload: PayPayload): Call<JsonObject>
 
+    /**
+     * Send [POST] request to get OTP to process VerveCard charge
+     *
+     * @param url
+     * @param verveOtpPayload
+     */
     @POST
     fun sendOTPForVerveCard(@Url url: String, @Body verveOtpPayload: VerveOtpPayload): Call<JsonObject>
 }

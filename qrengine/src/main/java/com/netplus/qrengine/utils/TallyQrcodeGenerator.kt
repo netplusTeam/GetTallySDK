@@ -87,7 +87,7 @@ class TallyQrcodeGenerator : AppCompatActivity() {
                         .setStringValue(TallyAppPreferences.TOKEN, data?.token ?: "")
                 }
 
-                override fun onError(errorMessage: String?) {
+                override fun onError(errorMessage: String?, statusCode: Int?) {
                     // Handle login error
                     callback.failed(errorMessage)
                 }
@@ -172,7 +172,7 @@ class TallyQrcodeGenerator : AppCompatActivity() {
                 }
 
                 // Handle QR code generation error
-                override fun onError(errorMessage: String?) {
+                override fun onError(errorMessage: String?, statusCode: Int?) {
                     callback.failed(errorMessage)
                 }
             }
@@ -234,7 +234,7 @@ class TallyQrcodeGenerator : AppCompatActivity() {
                     callback.success(data = data)
                 }
 
-                override fun onError(errorMessage: String?) {
+                override fun onError(errorMessage: String?, statusCode: Int?) {
                     callback.failed(message = errorMessage)
                 }
             })
@@ -280,7 +280,7 @@ class TallyQrcodeGenerator : AppCompatActivity() {
                 callback.success(data = data)
             }
 
-            override fun onError(errorMessage: String?) {
+            override fun onError(errorMessage: String?, statusCode: Int?) {
                 callback.failed(message = errorMessage)
             }
         })
@@ -341,7 +341,7 @@ class TallyQrcodeGenerator : AppCompatActivity() {
                 }
 
                 // Handle error when getting transactions
-                override fun onError(errorMessage: String?) {
+                override fun onError(errorMessage: String?, statusCode: Int?) {
                     callback.failed(errorMessage)
                 }
             }
@@ -404,7 +404,7 @@ class TallyQrcodeGenerator : AppCompatActivity() {
                     callback.success(data)
                 }
 
-                override fun onError(errorMessage: String?) {
+                override fun onError(errorMessage: String?, statusCode: Int?) {
                     callback.failed(errorMessage)
                 }
             }
@@ -462,7 +462,7 @@ class TallyQrcodeGenerator : AppCompatActivity() {
                     callback.success(data)
                 }
 
-                override fun onError(errorMessage: String?) {
+                override fun onError(errorMessage: String?, statusCode: Int?) {
                     callback.failed(errorMessage)
                 }
             }
@@ -500,7 +500,7 @@ class TallyQrcodeGenerator : AppCompatActivity() {
                     callback.success(data)
                 }
 
-                override fun onError(errorMessage: String?) {
+                override fun onError(errorMessage: String?, statusCode: Int?) {
                     callback.failed(errorMessage)
                 }
             }
@@ -534,7 +534,7 @@ class TallyQrcodeGenerator : AppCompatActivity() {
                     callback.success(data)
                 }
 
-                override fun onError(errorMessage: String?) {
+                override fun onError(errorMessage: String?, statusCode: Int?) {
                     callback.failed(errorMessage)
                 }
             })
@@ -561,7 +561,7 @@ class TallyQrcodeGenerator : AppCompatActivity() {
                     callback.success(data)
                 }
 
-                override fun onError(errorMessage: String?) {
+                override fun onError(errorMessage: String?, statusCode: Int?) {
                     callback.failed(errorMessage)
                 }
             })
@@ -573,7 +573,7 @@ class TallyQrcodeGenerator : AppCompatActivity() {
                 callback.success(data)
             }
 
-            override fun onError(errorMessage: String?) {
+            override fun onError(errorMessage: String?, statusCode: Int?) {
                 callback.failed(errorMessage)
             }
         })
@@ -585,7 +585,7 @@ class TallyQrcodeGenerator : AppCompatActivity() {
                 callback.success(data)
             }
 
-            override fun onError(errorMessage: String?) {
+            override fun onError(errorMessage: String?, statusCode: Int?) {
                 callback.failed(errorMessage)
             }
         })
@@ -597,7 +597,7 @@ class TallyQrcodeGenerator : AppCompatActivity() {
                 callback.success(data)
             }
 
-            override fun onError(errorMessage: String?) {
+            override fun onError(errorMessage: String?, statusCode: Int?) {
                 callback.failed(errorMessage)
             }
         })
