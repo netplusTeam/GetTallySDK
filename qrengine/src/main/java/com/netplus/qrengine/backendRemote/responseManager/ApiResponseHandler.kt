@@ -42,7 +42,7 @@ class ApiResponseHandler<T> {
         statusCode: Int? = null,
         callback: Callback<T>
     ) {
-        if (errorMessage != null || statusCode != null) {
+        if (errorMessage != null) {
             // Providing additional context to the onError callback based on the status code
             val adjustedErrorMessage = when (statusCode) {
                 in 500..599 -> "Internal error: $errorMessage"
