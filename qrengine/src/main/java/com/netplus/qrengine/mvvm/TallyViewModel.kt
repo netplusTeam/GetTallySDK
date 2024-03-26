@@ -18,15 +18,17 @@ import com.netplus.qrengine.backendRemote.model.qr.store.StoreTokenizedCardsResp
 import com.netplus.qrengine.backendRemote.model.transactions.updatedTransaction.UpdatedTransactionResponse
 import com.netplus.qrengine.backendRemote.model.verve.VerveOtpPayload
 import com.netplus.qrengine.backendRemote.responseManager.ApiResponseHandler
+import com.netplus.qrengine.manualDi.ManualDIHandler
 
 /**
  * ViewModel class for handling Tally-related operations, such as user login and QR code generation.
  *
  * @property tallyRepository An instance of [TallyRepository] for interacting with Tally API.
  */
-class TallyViewModel(private val tallyRepository: TallyRepository) : ViewModel() {
+class TallyViewModel(val tallyRepository: TallyRepository = ManualDIHandler.provideTallyRepository()) : ViewModel() {
 
     val recentGeneratedQrLiveData = MutableLiveData<GenerateQrcodeResponse>()
+    //private val tallyRepository = ManualDIHandler.provideTallyRepository()
 
     /**
      * Initiates the login process for a user, triggering authentication with the provided credentials.

@@ -1,3 +1,4 @@
+/*
 package com.netplus.qrengine.koin
 
 import android.app.Application
@@ -18,19 +19,25 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
+*/
 /**
  * @author Anyanwu Nicholas(codeBaron)
  * @since 16-11-2023
- */
+ *//*
 
+
+*/
 /**
  * Custom Application class for initializing Koin dependency injection.
- */
+ *//*
+
 class KoinApp : Application() {
 
-    /**
+    */
+/**
      * Called when the application is starting. Responsible for initializing Koin.
-     */
+     *//*
+
     override fun onCreate() {
         super.onCreate()
         startKoin {
@@ -40,11 +47,13 @@ class KoinApp : Application() {
         }
     }
 
-    /**
+    */
+/**
      * Provides a list of Koin modules used for dependency injection.
      *
      * @return List of Koin modules.
-     */
+     *//*
+
     private fun allModules(): List<Module> {
         val token = TallyAppPreferences.getInstance(this).getStringValue(TallyAppPreferences.TOKEN)
         //Network module providing Retrofit instance for API calls.
@@ -55,7 +64,9 @@ class KoinApp : Application() {
                     connectTimeout(30, TimeUnit.SECONDS)
                     addInterceptor { chain ->
                         val request = chain.request().newBuilder()
-                            /*.addHeader("token", TOKEN)*/.build()
+                            */
+/*.addHeader("token", TOKEN)*//*
+.build()
                         chain.proceed(request)
                     }
                 }.build()
@@ -79,4 +90,4 @@ class KoinApp : Application() {
         return listOf(networkModule, appModule)
     }
 
-}
+}*/

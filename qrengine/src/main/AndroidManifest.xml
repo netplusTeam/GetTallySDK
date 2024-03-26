@@ -3,5 +3,5 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
 
-    <application android:name=".koin.KoinApp" />
+    <!--<application android:name=".koin.KoinApp" />-->
 </manifest>

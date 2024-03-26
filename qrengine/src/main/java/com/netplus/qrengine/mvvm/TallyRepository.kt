@@ -22,6 +22,7 @@ import com.netplus.qrengine.backendRemote.model.transactions.updatedTransaction.
 import com.netplus.qrengine.backendRemote.model.verve.VerveOtpPayload
 import com.netplus.qrengine.backendRemote.responseManager.ApiResponseHandler
 import com.netplus.qrengine.backendRemote.responseManager.DynamicJsonErrorParser
+import com.netplus.qrengine.manualDi.ManualDIHandler
 import com.netplus.qrengine.utils.API_KEY
 import com.netplus.qrengine.utils.CHECK_OUT_PAY_URL
 import com.netplus.qrengine.utils.CHECK_OUT_URL
@@ -38,7 +39,7 @@ import retrofit2.Response
  *
  * @property tallyEndpoints An instance of the [TallyEndpoints] interface for making API requests.
  */
-class TallyRepository(private val tallyEndpoints: TallyEndpoints) {
+class TallyRepository(val tallyEndpoints: TallyEndpoints = ManualDIHandler.tallyEndpoints) {
 
     // Error mapper instance to handle error responses.
     var errorMapper: DynamicJsonErrorParser = DynamicJsonErrorParser()

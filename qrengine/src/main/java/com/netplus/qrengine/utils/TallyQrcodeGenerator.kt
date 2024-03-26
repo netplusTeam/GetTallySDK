@@ -17,9 +17,8 @@ import com.netplus.qrengine.backendRemote.model.qr.store.StoreTokenizedCardsResp
 import com.netplus.qrengine.backendRemote.model.transactions.updatedTransaction.UpdatedTransactionResponse
 import com.netplus.qrengine.backendRemote.model.verve.VerveOtpPayload
 import com.netplus.qrengine.backendRemote.responseManager.ApiResponseHandler
-import com.netplus.qrengine.internet.handler.InternetConfigViewModel
+import com.netplus.qrengine.manualDi.ManualDIHandler
 import com.netplus.qrengine.mvvm.TallyViewModel
-import org.koin.java.KoinJavaComponent.getKoin
 
 /**
  * Activity class responsible for authenticating the bank and generating QR codes.
@@ -28,8 +27,9 @@ class TallyQrcodeGenerator : AppCompatActivity() {
 
     companion object {
         // Lazy initialization of TallyViewModel and InternetConfigViewModel
-        private val tallyViewModel: TallyViewModel by lazy { getKoin().get<TallyViewModel>() }
-        private val internetConfigViewModel: InternetConfigViewModel by lazy { getKoin().get<InternetConfigViewModel>() }
+        //private val tallyViewModel: TallyViewModel by lazy { getKoin().get<TallyViewModel>() }
+        //private val internetConfigViewModel: InternetConfigViewModel by lazy { getKoin().get<InternetConfigViewModel>() }
+        private val tallyViewModel: TallyViewModel = ManualDIHandler.provideTallyViewModel()
 
     }
 

@@ -3,9 +3,7 @@ package com.netplus.qrengine.internet.handler
 import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.netplus.qrengine.internet.model.InternetConfigObject
-import kotlinx.coroutines.launch
 
 /**
  * @author Anyanwu Nicholas(codeBaron)
@@ -22,10 +20,10 @@ class InternetConfigViewModel : ViewModel() {
     }
 
     fun networkState(context: Context): MutableLiveData<InternetConnectionHandler<InternetConfigObject>>? {
-        viewModelScope.launch {
+        /*viewModelScope.launch {
             internetConnectivityConfig = InternetConnectivityConfig().networkInstance()
             internetConfigObject = internetConnectivityConfig?.internetConfig(context)
-        }
+        }*/
         return internetConfigObject
     }
 }
