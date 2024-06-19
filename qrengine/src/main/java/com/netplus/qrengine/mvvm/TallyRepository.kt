@@ -385,7 +385,7 @@ class TallyRepository(val tallyEndpoints: TallyEndpoints = ManualDIHandler.tally
         pageSize: Int,
         callback: ApiResponseHandler.Callback<UpdatedTransactionResponse>
     ) {
-        val qr_code_ids = QrcodeIds(listOf("e895a5cf-f12a-41ae-bde0-bcc57c81dc57"))
+        val qr_code_ids = QrcodeIds(qr_code_ids = qr_code_id)
         val apiResponseHandler = ApiResponseHandler<UpdatedTransactionResponse>()
         tallyEndpoints.getTransactions(
             "$TRANSACTIONS_BASE_URL/multiple-qrcode-transactions/",
